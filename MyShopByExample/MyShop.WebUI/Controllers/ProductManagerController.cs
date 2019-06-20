@@ -73,6 +73,7 @@ namespace MyShop.WebUI.Controllers{
                 }
                 /* Using the model from context (ProductRepository)
                  * Adding any changes 
+                 */
                 productToEdit.Category = product.Category;
                 productToEdit.Description = product.Description;
                 productToEdit.Image = product.Image;
