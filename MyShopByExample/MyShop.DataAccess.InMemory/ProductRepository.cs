@@ -6,34 +6,39 @@ using System.Threading.Tasks;
 using MyShop.Core.Models;
 using System.Runtime.Caching;
 
+/// <summary>
+///  MyShop.DataAccess.InMemory 
+///  Class designed to initiate a local memory cache. 
+///  The object will be able to perform CRUD operations.
+/// </summary>
 namespace MyShop.DataAccess.InMemory
 {
-    class ProductRepository
+    public class ProductRepository
     {
         ObjectCache cache = MemoryCache.Default;
-        List<Product> products = new List<Product>();
+        List<Product> productsList;// = new List<Product>();
 
         public ProductRepository()
         {
-            products = cache["products"] as List<Product>;
-            if (products == null)
+            productsList = cache["productsList"] as List<Product>;
+            if (productsList == null)
             {
-                products = new List<Product>();
+                productsList = new List<Product>();
             }
         }
         public void Commit()
         {
-            cache["products"] = products;
+            cache["productsList"] = productsList;
         }
 
         public void Insert(Product p)
         {
-            products.Add(p);
+            productsList.Add(p);
         }
 
         public void Update(Product product)
         {
-            Product productToUpdate = products.Find(p => p.Id == product.Id);
+            Product productToUpdate = productsList.Find(p => p.Id == product.Id);
 
             if( productToUpdate != null)
             {
@@ -47,7 +52,7 @@ namespace MyShop.DataAccess.InMemory
 
         public Product Find(string Id)
         {
-            Product product = products.Find(p => p.Id == Id);
+            Product product = productsList.Find(p => p.Id == Id);
 
             if (product != null)
             {
@@ -61,16 +66,16 @@ namespace MyShop.DataAccess.InMemory
 
         public IQueryable<Product> Collection()
         {
-            return products.AsQueryable();
+            return productsList.AsQueryable();
         }
 
         public void Delete(string Id)
         {
-            Product productToDelete = products.Find(p => p.Id == Id);
+            Product productToDelete = productsList.Find(p => p.Id == Id);
 
             if (productToDelete != null)
             {
-                products.Remove(productToDelete);
+                productsList.Remove(productToDelete);
             }
             else
             {
