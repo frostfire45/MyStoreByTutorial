@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MyShop.Core.Contracts;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModels;
 using MyShop.DataAccess.InMemory;
@@ -11,13 +12,31 @@ namespace MyShop.WebUI.Controllers{
     
     public class ProductManagerController : Controller
     {
-        InMemoryRepository<Product> context;
-        InMemoryRepository<ProductCategory> productCatagory;
+        // INTERFACE VS. CLASS REFERENCE
+        // Commented out and implementing an interface
+        // -------------------------------------------
+        // InMemoryRepository<Product> context;
+        // InMemoryRepository<ProductCategory> productCatagory;
+        // public ProductManagerController()
+        //{
+        //    context = new InMemoryRepository<Product>();
+        //    productCatagory = new InMemoryRepository<ProductCategory>();
+        //}
+        // -------------------------------------------
 
-        public ProductManagerController()
+        IRepository<Product> context;
+        IRepository<ProductCategory> productCatagory;
+
+        // INJECTION OF OUR INTERFACE
+        // We will inject the contructor with the interfaces contents
+        // =================================
+        // public ProductManagerController()
+        // -----------Injected-------------
+        // public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCatagoryContext)
+        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCatagoryContext)
         {
-            context = new InMemoryRepository<Product>();
-            productCatagory = new InMemoryRepository<ProductCategory>();
+            context = productContext;
+            productCatagory = productCatagoryContext;
         }
         // GET: ProductManager
         public ActionResult Index()
